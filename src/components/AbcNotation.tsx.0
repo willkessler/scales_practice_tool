@@ -1,0 +1,59 @@
+import { useEffect, useRef } from 'react';
+
+declare global {
+  interface Window {
+    ABCJS: any
+  }
+}
+
+interface AbcNotationProps {
+  notation: string
+}
+
+const AbcNotation: React.FC<AbcNotationProps> = ({ notation }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && containerRef.current) {
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/abcjs/6.2.2/abcjs-basic-min.js';
+      script.async = true;
+      document.body.appendChild(script);
+
+      script.onload = () => {
+        if (window.ABCJS && containerRef.current) {
+          window.ABCJS.renderAbc(containerRef.current, notation, {
+            responsive: 'resize',
+            format: {
+              vocalfont: "10px Arial",
+              gchordfont: "8px Arial",
+              composerfont: "8px Arial",
+              footerfont: "8px Arial",
+              historyfont: "8px Arial",
+              infofont: "8px Arial",
+              partsfont: "8px Arial",
+              repeatfont: "8px Arial",
+              subtitlefont: "8px Arial",
+              tempofont: "8px Arial",
+              textfont: "8px Arial",
+              titlefont: "8px Arial",
+              voicefont: "8px Arial",
+              wordsfont: "8px Arial"
+            },
+            // Add this line to enable HTML in lyrics
+            lyrics_htmlparser: true
+          })
+        }
+      }
+
+      return () => {
+        document.body.removeChild(script);
+      }
+    }
+  }, [notation])
+
+  return <div ref={containerRef}></div>
+}
+
+export default AbcNotation;
+
