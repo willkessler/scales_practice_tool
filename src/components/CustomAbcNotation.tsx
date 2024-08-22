@@ -36,7 +36,7 @@ const CustomAbcNotation: React.FC<CustomAbcNotationProps> = ({
         visualTranspose: 0,
         foregroundColor: "black",  // Set the default color for notes to black
         paddingtop: 10, // Add some padding to the top for the new labels
-        paddingbottom: 20, // Add some padding to the top for the new labels
+        paddingbottom: 40, // Add some padding to the top for the new labels
       };
 
       try {
@@ -168,6 +168,10 @@ const CustomAbcNotation: React.FC<CustomAbcNotationProps> = ({
       label.setAttribute('y', (bbox.y + bbox.height + 17).toString());
       label.setAttribute('text-anchor', 'middle');
       label.setAttribute('font-size', '10');
+
+      const stringNumber = strings[index];
+      const fretNumberColor = stringColors[stringNumber] || 'black';
+      label.setAttribute('stroke', fretNumberColor);
       label.textContent = `${fretNumber}`;
       group.appendChild(label);
 
@@ -206,7 +210,7 @@ const CustomAbcNotation: React.FC<CustomAbcNotationProps> = ({
         fingerCircle.setAttribute('cy', (bbox.y + bbox.height + 29).toString());
         fingerCircle.setAttribute('r', '7');
         fingerCircle.setAttribute('fill', 'none');
-        fingerCircle.setAttribute('stroke', 'black');
+        fingerCircle.setAttribute('stroke', '#FFCBA4');
         group.appendChild(fingerCircle);
 
         label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
@@ -215,6 +219,7 @@ const CustomAbcNotation: React.FC<CustomAbcNotationProps> = ({
         label.setAttribute('y', (bbox.y + bbox.height + 32).toString());
         label.setAttribute('text-anchor', 'middle');
         label.setAttribute('font-size', '10');
+        label.setAttribute('stroke', '#FFCBA4');
         label.textContent = `${fingerPosition}`;
         group.appendChild(label);
       }      
