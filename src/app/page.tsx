@@ -3,11 +3,13 @@
 import { useState, useEffect } from 'react'
 import CustomAbcNotation from '@/components/CustomAbcNotation'
 
-// string constants
-const E = 0;
-const A = 1;
-const D = 2;
+// string constants for fret indicators
 const G = 3;
+const D = 2;
+const A = 1;
+const E = 0;
+
+const stringColors = ['#2222FF', '#00AA00', '#CD7F32','#CC0000' ];
 
 const scales = {
   cMajor: {
@@ -31,7 +33,7 @@ C,D,E,F, G,A,B,C DEFG ABcB | cBAG FEDC B,A,G,F, E,D,C,B,, | C,E,G,B, CEGB  c8 |`
     ],
     strings:         [A, A,
                       D, D, D, D, D, D, D,
-                      G, G, G, G, G, G, G,
+                      G, G, G, G, G, G,
                       G, G, G, G,
                       D, D, D, D,
                       A, A, A, A, A, A,
@@ -74,12 +76,12 @@ export default function Home() {
     <main className="p-4">
       <h1 className="text-2xl font-bold mb-4">Bass Guitar Scale Practice</h1>
       <div className="mb-4">
-        <button
-          className={`px-4 py-2 rounded ${isPlaying ? 'bg-red-500' : 'bg-green-500'} text-white`}
-          onClick={() => setIsPlaying(prev => !prev)}
-        >
-          {isPlaying ? 'Stop' : 'Start'} Practice
-        </button>
+        <ul>
+          <li style={{color:stringColors[3], fontWeight: 'bold'}}> &mdash;&mdash;&mdash;&mdash; G &mdash;&mdash;&mdash;&mdash;</li>
+          <li style={{color:stringColors[2], fontWeight: 'bold'}}> &mdash;&mdash;&mdash;&mdash; D &mdash;&mdash;&mdash;&mdash;</li>
+          <li style={{color:stringColors[1], fontWeight: 'bold'}}> &mdash;&mdash;&mdash;&mdash; A &mdash;&mdash;&mdash;&mdash;</li>
+          <li style={{color:stringColors[0], fontWeight: 'bold'}}> &mdash;&mdash;&mdash;&mdash; E &mdash;&mdash;&mdash;&mdash;</li>
+        </ul>
       </div>
       <div className="mt-4">
         <CustomAbcNotation 
@@ -87,6 +89,7 @@ export default function Home() {
           fretNumbers={scales[currentScale as keyof typeof scales].fretNumbers}
           fingerPositions={scales[currentScale as keyof typeof scales].fingerPositions}
           strings={scales[currentScale as keyof typeof scales].strings}
+          stringColors={stringColors}
           highlightedNoteIndex={currentNoteIndex}
         />
       </div>
@@ -94,6 +97,12 @@ export default function Home() {
         <p>Press spacebar to start/stop practice mode. </p>
         <p>Use left and right arrow keys to navigate notes.</p>
         <p>Practice mode: {isPlaying ? 'On' : 'Off'}</p>
+        <button
+          className={`px-4 py-2 rounded ${isPlaying ? 'bg-red-500' : 'bg-green-500'} text-white`}
+          onClick={() => setIsPlaying(prev => !prev)}
+        >
+          {isPlaying ? 'Stop' : 'Start'} Practice
+        </button>
       </div>
     </main>
   )

@@ -6,6 +6,7 @@ interface CustomAbcNotationProps {
   highlightedNoteIndex: number;
   fretNumbers: number[];
   strings: number[];
+  stringColors: string[];
   fingerPositions: string[];
 }
 
@@ -14,6 +15,7 @@ const CustomAbcNotation: React.FC<CustomAbcNotationProps> = ({
   fretNumbers,
   fingerPositions,
   strings,
+  stringColors,
   highlightedNoteIndex
 }) => {
 
@@ -33,8 +35,8 @@ const CustomAbcNotation: React.FC<CustomAbcNotationProps> = ({
         oneSvgPerLine: false,
         visualTranspose: 0,
         foregroundColor: "black",  // Set the default color for notes to black
-        paddingtop: 25, // Add some padding to the top for the new labels
-        paddingbottom: 45, // Add some padding to the top for the new labels
+        paddingtop: 10, // Add some padding to the top for the new labels
+        paddingbottom: 20, // Add some padding to the top for the new labels
       };
 
       try {
@@ -45,8 +47,8 @@ const CustomAbcNotation: React.FC<CustomAbcNotationProps> = ({
           const svg = containerRef.current?.querySelector('svg');
           if (svg) {
             //console.log('SVG found, applying highlight');
+            colorCodeNotes(svg, stringColors, strings);
             labelNote(svg, highlightedNoteIndex);
-            colorCodeNotes(svg, strings);
           } else {
             console.log('No SVG found in container');
           }
@@ -59,9 +61,8 @@ const CustomAbcNotation: React.FC<CustomAbcNotationProps> = ({
   }, [notation, fretNumbers, strings, highlightedNoteIndex]);
 
 
-  const colorCodeNotes = (svg: SVGSVGElement, strings: number[]) => {
+  const colorCodeNotes = (svg: SVGSVGElement, stringColors:strings[], strings: number[]) => {
     const noteElements = svg.querySelectorAll('.abcjs-note');
-    const stringColors = ['#2222FF', '#00FF00', '#FF55FF','#FF0000' ]; // Red, Green, Blue, Orange
 
     //console.log('colorCodeNotes, stringColors:', stringColors, 'strings:', strings);
     noteElements.forEach((noteElement, index) => {
@@ -135,11 +136,6 @@ const CustomAbcNotation: React.FC<CustomAbcNotationProps> = ({
       
       // Get the bounding box of the note element
       const bbox = noteElement.getBBox();
-      const highlightBuffer = 2;
-      const highlightX = bbox.x - highlightBuffer;
-      const highlightY = bbox.y - highlightBuffer;
-      const highlightWidth = bbox.width + highlightBuffer;
-      const highlightHeight = bbox.height + highlightBuffer * 4;
       
       // Create a group to hold our highlight and labels
       const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -227,6 +223,12 @@ const CustomAbcNotation: React.FC<CustomAbcNotationProps> = ({
       svg.appendChild(group);
 
       // Highlight the note
+      const highlightBuffer = 2;
+      const highlightX = bbox.x - highlightBuffer;
+      const highlightY = bbox.y - highlightBuffer - 1;
+      const highlightWidth = bbox.width + highlightBuffer + 2;
+      const highlightHeight = bbox.height + highlightBuffer * 3 + 1;
+
       const highlight = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
       highlight.setAttribute('class', 'highlight');
       highlight.setAttribute('x', highlightX.toString());
