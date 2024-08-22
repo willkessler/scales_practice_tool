@@ -3,6 +3,12 @@
 import { useState, useEffect } from 'react'
 import CustomAbcNotation from '@/components/CustomAbcNotation'
 
+// string constants
+const E = 0;
+const A = 1;
+const D = 2;
+const G = 3;
+
 const scales = {
   cMajor: {
     notation: `X:1
@@ -10,10 +16,32 @@ M:4/4
 L:1/16
 K:C bass
 %%clef bass
-C,D,E,F, G,A,B,C DEFG ABcd | cBAG FEDC B,A,G,F, E,D,C,B,, | C,E,G,B, CEGB  c8 |`,
-    fretNumbers:     ['3A','5','2D','3','5','7','9','10','12','9E','10','12','14','16','17',
-                      '16', '17', '16', '14', '17', '15', '14', '12', '15', '14', '12', '10', '8', '7',
-                      '10', '8', '7', '8', '7','10', '9', '10', '9', '12', '16', '17'],
+C,D,E,F, G,A,B,C DEFG ABcB | cBAG FEDC B,A,G,F, E,D,C,B,, | C,E,G,B, CEGB  c8 |`,
+    fretNumbers:     [3, 5, // A string
+                      2, 3, 5, 7, 9, 10, 12, // D string
+                      9, 10, 12, 14, 16, 17, // G string
+                      16, 17, 16, 14, // G string
+                      17, 15, 14, 12, // D string
+                      15, 14, 12, 10, 8, 7, // A string
+                      10, 8, 7, // E string
+                      8, // E string
+                      7, 10, // A string
+                      9, 10, // D string
+                      9, 12, 16, 17, // G string
+    ],
+    strings:         [A, A,
+                      D, D, D, D, D, D, D,
+                      G, G, G, G, G, G, G,
+                      G, G, G, G,
+                      D, D, D, D,
+                      A, A, A, A, A, A,
+                      E, E, E,
+                      E,
+                      A, A,
+                      D, D,
+                      G, G, G, G,
+    ],
+    // special finger positions shifts
     fingerPositions: ['0:2','5:1', '7:4', '8:4','12:1','21:1', '22:1','26:4'],
   },    
 }
@@ -58,6 +86,7 @@ export default function Home() {
           notation={scales[currentScale as keyof typeof scales].notation}
           fretNumbers={scales[currentScale as keyof typeof scales].fretNumbers}
           fingerPositions={scales[currentScale as keyof typeof scales].fingerPositions}
+          strings={scales[currentScale as keyof typeof scales].strings}
           highlightedNoteIndex={currentNoteIndex}
         />
       </div>
